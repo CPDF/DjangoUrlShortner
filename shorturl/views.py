@@ -1,9 +1,12 @@
 from django.conf.urls import url
 from django.http import request
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from .models import Url
 import random
 import string
+
+####
 
 # Create your views here.
 def index(req):
@@ -17,11 +20,22 @@ def shorten_url():
         return rand_letters
 
 def home(req):
-    print("POST: ", req.POST)
     if(req.POST):
         entry = Url()
         url_recieved = str(req.POST["nm"])
-        short_url = shorten_url()
+        #If custom shorten then custom else short_url
+            #if custom shorten is already on database send error message
+        if(len(str(req.POST["user_short"])) > 0):
+            if(Url.objects.filter(short=str(req.POST["user_short"])).first()):
+                messages.error(req, 'Short url already exist!')
+                return redirect("/")
+            else:
+                short_url = str(req.POST["user_short"])
+
+        #If a custom short url is not provided use the shorten_url function
+        else:
+            short_url = shorten_url()
+
         entry.long = url_recieved
         entry.short = short_url
         entry.save()
