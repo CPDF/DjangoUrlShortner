@@ -6,7 +6,7 @@ from .models import Url
 import random
 import string
 
-####
+
 
 # Create your views here.
 def index(req):
