@@ -6,6 +6,9 @@ from .models import Url
 import random
 import string
 
+from datetime import timedelta, datetime
+
+#Warning! Use only if you wish to delete all objects: Url.objects.all().delete()
 
 
 # Create your views here.
@@ -20,6 +23,7 @@ def shorten_url():
         return rand_letters
 
 def home(req):
+
     if(req.POST):
         entry = Url()
         url_recieved = str(req.POST["nm"])

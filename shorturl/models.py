@@ -1,20 +1,24 @@
-from djongo import models
 import uuid
-from datetime import date
+from djongo import models
+from django.utils.timezone import now
+from datetime import timedelta, datetime
+
 
 ####
 
-data_dict = {
-    'type' : 'Date',
-    'expireAfterSeconds' : '500',
-}
+time = datetime.now()
+expire_date = datetime.now() + timedelta(minutes=5)
+expire_date_milliseconds = (round(expire_date.timestamp() * 1000))
+
+
 
 # Create your models here.
 class Url(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    long = models.CharField(max_length=1000)
-    short = models.CharField(max_length=10)
-    created_at = models.DateField(default=date.today)
+    long = models.CharField(default='', max_length=1000)
+    short = models.CharField(default='', max_length=10)
+    created_at = models.DateTimeField(default=now)
+    expire_at = models.IntegerField(default=expire_date_milliseconds)
     verbose_name="urls"
 
     def __str__(self):
