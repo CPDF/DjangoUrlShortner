@@ -19,7 +19,12 @@ class Url(models.Model):
     short = models.CharField(default='', max_length=10)
     created_at = models.DateTimeField(default=now)
     expire_at = models.IntegerField(default=expire_date_milliseconds)
+    ip = models.CharField(default='', max_length=100)
+    domain = models.CharField(default='', max_length=100)
+    redirect_number = models.IntegerField(default=0)
     verbose_name="urls"
 
+
     def __str__(self):
-        return str(self.long)
+        return self.long
+

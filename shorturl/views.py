@@ -1,10 +1,11 @@
 from django.conf.urls import url
-from django.http import request
+from django.http import request, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Url
 import random
 import string
+import re
 
 from datetime import timedelta, datetime
 
@@ -12,8 +13,6 @@ from datetime import timedelta, datetime
 
 
 # Create your views here.
-def index(req):
-    return render(req, "index.html")
 
 def shorten_url():
     letters = string.ascii_lowercase + string.ascii_uppercase
@@ -22,11 +21,34 @@ def shorten_url():
         rand_letters = "".join(rand_letters)
         return rand_letters
 
+def get_domain(req):
+    domain = str(req.POST["nm"])
+    domain = re.search('https?://([A-Za-z_0-9.-]+).*', domain)
+    if domain:
+        return domain.group(1)
+
+    return domain
+
+def get_count():
+    obj= Url.objects.last()    
+    if(obj == None):
+        return 1
+    else:
+        obj = obj.redirect_number
+        return obj + 1
+
 def home(req):
 
     if(req.POST):
+        #Use the Url model
         entry = Url()
+
+        #get user data from form
         url_recieved = str(req.POST["nm"])
+        #analytics
+        domain = get_domain(req)
+        
+
         #If custom shorten then custom else short_url
             #if custom shorten is already on database send error message
         if(len(str(req.POST["user_short"])) > 0):
@@ -40,8 +62,11 @@ def home(req):
         else:
             short_url = shorten_url()
 
+        entry.ip = req.META['HTTP_ORIGIN']
+        entry.domain = domain
         entry.long = url_recieved
         entry.short = short_url
+        entry.redirect_number = get_count()
         entry.save()
         return redirect("display_short_url", short_url)
 
@@ -52,7 +77,7 @@ def redirection(request, short_url):
     if long_url:
         return redirect(long_url.long)
     else:
-        return f'<h1>Url doesnt exist</h1>'
+        return HttpResponse('<h1>Link does not longer exists.</h1>')
 
 def display_short_url(request, url):
     return render(request, 'short_url.html', context={"short_url_display": url})
