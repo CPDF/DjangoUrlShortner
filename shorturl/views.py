@@ -14,7 +14,7 @@ from datetime import timedelta, datetime
 
 # Create your views here.
 
-def shorten_url():
+def small_url():
     letters = string.ascii_lowercase + string.ascii_uppercase
     while True:
         rand_letters = random.choices(letters, k=5)
@@ -58,9 +58,9 @@ def home(req):
             else:
                 short_url = str(req.POST["user_short"])
 
-        #If a custom short url is not provided use the shorten_url function
+        #If a custom short url is not provided use the small_url function
         else:
-            short_url = shorten_url()
+            short_url = small_url()
 
         entry.ip = req.META['HTTP_ORIGIN']
         entry.domain = domain
