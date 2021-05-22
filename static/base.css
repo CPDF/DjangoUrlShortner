@@ -1,0 +1,31 @@
+.mainBackground {
+    background-color: #66c2ff;
+}
+
+.MainTile{
+    text-align: center;
+}
+
+.UrlMain{
+    height: 10em;
+    display: flex;
+    align-items: center;
+    justify-content: center 
+}
+
+.UrlBlock{
+    margin: 0;
+    margin-top:100px;
+}
+
+.SubmitButton{
+    margin: 0;
+}
+
+.BackHomeButton{
+    background-color: crimson;
+}
+
+.BackHomeButton a{
+    color: white;
+}

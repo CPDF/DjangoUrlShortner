@@ -3,6 +3,15 @@
 {% block title %}Short URL{% endblock %}
 
 {% block content %}
-    <h1>http://localhost:8000/{{short_url_display}}</h1>
-    <a href="http://localhost:8000/">BACK TO HOME</a>
+
+    <div>
+
+        <h1>http://localhost:8000/{{short_url_display}} </h1>
+
+        <h3 class="BackHomeButton">
+            <a class="col-md-12 offset-md-3" href="http://localhost:8000/"> BACK TO HOME</a>
+        </h3>
+
+    </div>
+    
 {% endblock %}
